@@ -12,9 +12,9 @@ TikTok is working on the development of a predictive model that can determine wh
 ### **Task 1) Imports, Links, and Loading:**
 
 - Import data and packages for building **regression model**:
-  * **pandas** and **numpy**: for data manipulation
-  * **matplotlib** and **seaborn**: for data viz
-  * **sklearn**: for regression modelling
+  * **pandas** and **numpy**---> *data manipulation*
+  * **matplotlib** and **seaborn**---> *data viz*
+  * **sklearn**---> *regression modelling*
     
 
 ⚠️⚠️⚠️ For more details, visit:[.......................................................]
