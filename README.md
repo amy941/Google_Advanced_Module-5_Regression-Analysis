@@ -11,13 +11,32 @@ TikTok is working on the development of a predictive model that can determine wh
 # PACE: Plan 📝
 ### **Task 1) Imports, Links, and Loading:**
 
-- Import data and packages for building **regression model**:
+```
+# Import packages for data manipulation
+import pandas as pd
+import numpy as np
+
+# Import packages for data visualization
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Import packages for data preprocessing
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.utils import resample
+
+# Import packages for data modeling
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+```
+
+✍ Import data and packages for building **regression model**:
   * **pandas** and **numpy**---> *data manipulation*
   * **matplotlib** and **seaborn**---> *data viz*
   * **sklearn**---> *regression modelling*
     
-
-⚠️⚠️⚠️ For more details, visit:[.......................................................]
 
 ---
 
@@ -26,7 +45,8 @@ TikTok is working on the development of a predictive model that can determine wh
 
 - Quick scan on data and clean if needed (drop missing columns, duplicates, etc.)
   * Quick peak: using ```.head()```, ```.shape```, ```.dtypes```, ```info()```, ```.describe()```
-      * Results:
+      * Results: 19382 rows and 12 columns in the dataset. 3 integers, 4 strings, and 5 floats.
+
   * Clean: using ```.dropna()```, ```.duplicated()```
       * Results:
    
