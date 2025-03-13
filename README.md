@@ -76,4 +76,8 @@ data.loc[data["video_like_count"] > upper_limit, "video_like_count"] = upper_lim
 
 **- Results and Evaluation:**
 
+---
+# CERTIFICATE
+![cert](https://github.com/user-attachments/assets/368daf48-3337-4339-8d74-fab53d9b7ef6)
+
 
