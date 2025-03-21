@@ -39,7 +39,7 @@ TikTok observed that verified users are **more likely to post opinions rather th
 - ```data.types```: (3)int64, (4)string, (5)float 
   
 ### Clean data: remove missing values & duplicates
-- ```data.isna().sum()```: 298``` rows with missing values ---> drop them
+- ```data.isna().sum()```: 298 rows with missing values ---> drop them
 - ```data.duplicated().sum()```: zero dup
   
 ### Cap Outliers:
