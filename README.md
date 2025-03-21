@@ -45,8 +45,6 @@ TikTok observed that verified users are **more likely to post opinions rather th
 ### Cap Outliers:
 
 ```
-# Create a boxplot to visualize distribution of `video_like_count`
-### YOUR CODE HERE ###
 plt.figure(figsize=(6,2))
 
 plt.title('video_like_count', fontsize=10)
@@ -57,9 +55,35 @@ sns.boxplot(x=data['video_like_count'], color='lightpink')
 plt.show()
 
 ```
+![video_like_count](https://github.com/user-attachments/assets/a85254d3-c3f0-44ac-a8cf-ef773297a6e0)
 
+✍ The ```video_like_count`` boxplot revealed a **long right tail**, meaning a few videos had **extremely high like counts** (1e5 ~ 6e5). To handle this, we **capped** the extreme values using **IQR rule**
+
+
+```
+percentile25 = data['video_like_count'].quantile(0.25)
+percentile75 = data['video_like_count'].quantile(0.75)
+
+iqr = percentile75 - percentile25
+upper_limit = percentile75 + 1.5*iqr
+
+data.loc[data['video_like_count'] > upper_limit, 'video_like_count'] = upper_limit
+```
+✍ **Interquartile Range (IQR)** replaces all extreme values **above the upper limit**, keeping the feature in a reasonable range without deleting any rows.
+
+🔁 Repeat for ```video_comment_count```
+
+⚠️⚠️⚠️ For more details, visit:
 
 ## Task 2) Explore Class Imbalance
+
+### Verified accounts
+```
+data['verified_status'].value_counts(normalize=True)
+```
+
+
+✍ **93.7%** videos posted by unverified accounts and **6.3% videos posted by verified accounts.**
 
 ## Task 3) Feature Engineering
 
