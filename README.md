@@ -17,11 +17,11 @@ TikTok observed that verified users are **more likely to post opinions rather th
 ## Imports, Links, and Loading:
 
 - Import data and packages for building **regression model**:
-  * **pandas** and **numpy**---> *data manipulation*
-  * **matplotlib** and **seaborn**---> *data viz*
-  * **scikit-learn**---> *model building, evaluation*
-  * **OneHotEncoder, train_test_split** ---> *feature engineering and data splitting*
-  * **LogisticRegression, classification_report** ---> *model training and validation*
+  * **pandas** and **numpy** --> *data manipulation*
+  * **matplotlib** and **seaborn** --> *data viz*
+  * **scikit-learn** --> *model building, evaluation*
+  * **OneHotEncoder, train_test_split** --> *feature engineering and data splitting*
+  * **LogisticRegression, classification_report** --> *model training and validation*
 
  - ```verified_status```: verified/not verified
  - Features considered:
@@ -81,9 +81,33 @@ data.loc[data['video_like_count'] > upper_limit, 'video_like_count'] = upper_lim
 ```
 data['verified_status'].value_counts(normalize=True)
 ```
+![verified_account](https://github.com/user-attachments/assets/4a7b2eeb-e71b-4a49-9618-b5c8437db00d)
 
+✍ **93.7%** videos posted by unverified accounts and **6.3% videos posted by verified accounts.** So, the outcome variable is not very balanced --> need **UPSAMPLING**
 
-✍ **93.7%** videos posted by unverified accounts and **6.3% videos posted by verified accounts.**
+## Applied UPSAMPLING 
+
+```
+# Identify data points from majority and minority classes
+data_majority = data[data['verified_status'] == 'not verified']
+data_minority = data[data['verified_status'] == 'verified']
+
+# Upsample the minority class (which is "verified")
+data_minority_upsampled = resample(data_minority, 
+                                   replace=True,
+                                   n_samples=len(data_majority),
+                                   random_state=0)
+
+# Combine majority class with upsampled minority class
+data_upsampled = pd.concat([data_majority, data_minority_upsampled]).reset_index(drop=True)
+
+# Display new class counts
+data_upsampled['verified_status'].value_counts()
+```
+✍ ```replace=True```: to sample with replacement
+```n_samples=len(data_majority)```: to match majority class
+```random_state=0```: reproducibility, zero result are repeatable
+
 
 ## Task 3) Feature Engineering
 
