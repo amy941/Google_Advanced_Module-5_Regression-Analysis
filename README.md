@@ -81,7 +81,7 @@ data.loc[data['video_like_count'] > upper_limit, 'video_like_count'] = upper_lim
 ```
 data['verified_status'].value_counts(normalize=True)
 ```
-![verified_account](https://github.com/user-attachments/assets/4a7b2eeb-e71b-4a49-9618-b5c8437db00d)
+
 
 ✍ **93.7%** videos posted by unverified accounts and **6.3% videos posted by verified accounts.** So, the outcome variable is not very balanced --> need **UPSAMPLING**
 
