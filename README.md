@@ -85,7 +85,7 @@ data['verified_status'].value_counts(normalize=True)
 
 ✍ **93.7%** videos posted by unverified accounts and **6.3% videos posted by verified accounts.** So, the outcome variable is not very balanced --> need **UPSAMPLING**
 
-## Applied UPSAMPLING 
+### Applied UPSAMPLING 
 
 ```
 # Identify data points from majority and minority classes
@@ -110,8 +110,12 @@ data_upsampled['verified_status'].value_counts()
 
 
 ## Task 3) Feature Engineering
+### Create ```text_length``` from ```video_transcription_text```
+
+
 
 ## Task 4) Multicollinearity Check
+### Heatmap Correlation
 
 
 
@@ -123,45 +127,27 @@ data_upsampled['verified_status'].value_counts()
 
 
 
-
-- create **boxplot** & **Interquartile Range (IQR)** for ```video_duration_sec```, ```video_view_count```, ```video_like_count```, and ```video_comment_count```
-
-```
-percentile25 = data["video_like_count"].quantile(0.25)
-percentile75 = data["video_like_count"].quantile(0.75)
-
-iqr = percentile75 - percentile25
-upper_limit = percentile75 + 1.5 * iqr
-
-data.loc[data["video_like_count"] > upper_limit, "video_like_count"] = upper_limit
-```
-
-📸 [................................photo for OUTLIERS]
-
-✍ **~93% videos posted are unverified, ~6% are verified.**
-
-🔁 Repeat for the rest of column [.................................source]
-
----
-
-### Task 2b) Heatmap Correlation
-
-📸 [................................photo for HEATMAP]
-
-✍ Obervation:
-
-
-
-
-
-
-⚠️⚠️⚠️ For more details, visit:
 
 
 ---
 
 # PACE: Construct 📊
-### **Task 3) Build visualizations:**
+## Task 1) Feature Selection
+
+
+
+
+## Task 2) Data Preparation
+### OneHotCoder
+### Encoded ```verified_status``` to Binary
+
+
+
+
+## Task 3) Model Building
+### LogisticRegression
+### Train & Test Split
+
 
 
 
@@ -175,8 +161,27 @@ data.loc[data["video_like_count"] > upper_limit, "video_like_count"] = upper_lim
 
 ---
 # PACE: Execute 🤝
+## Task 1) Model Evaluation
+### Confusion Matrix
 
-**- Results and Evaluation:**
+
+
+
+## Task 2) Performance Metrics
+
+
+
+## Task 3) Coefficient Insights
+
+
+
+---
+# 📌 Business Recommendations
+
+
+
+---
+# ✅ Conclusions
 
 ---
 # CERTIFICATE
