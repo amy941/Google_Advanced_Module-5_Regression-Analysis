@@ -105,7 +105,7 @@ data_upsampled = pd.concat([data_majority, data_minority_upsampled]).reset_index
 data_upsampled['verified_status'].value_counts()
 ```
 
-![upsampled](https://github.com/user-attachments/assets/37a9db15-3359-4433-8c69-1b296393d0b2)
+![upsampled](https://github.com/user-attachments/assets/e725a3d0-a244-4a38-a275-75e469ad2690)
 
 ✍ **Upsampling** to create class balance in the outcome variable. not verified = verified = 17884
 
@@ -171,22 +171,28 @@ plt.show()
     
 ## Task 2) Data Preparation
 ### OneHotCoder
-- Step 1: Select categorical columns to encode
+**- Step 1: Select categorical columns to encode**
+  
 ```X_train_to_encode = X_train[["claim_status", "author_ban_status"]]```
 
-- Step 2: Initialize OneHotEncoder: ```not verified``` = 0, ```verified``` = 1
+**- Step 2: Initialize OneHotEncoder:** ```not verified``` = 0, ```verified``` = 1
+  
 ```X_encoder = OneHotEncoder(drop='first', sparse_output=False)```
 
-- Step 3: Fit & Transform the training data
+**- Step 3: Fit & Transform the training data**
+  
 ```X_train_encoded = X_encoder.fit_transform(X_train_to_encode)```
 
-- Step 4: Retrieve encoded feature names
+**- Step 4: Retrieve encoded feature names**
+  
 ```X_encoder.get_feature_names_out()```
 
-- Step 5: Convert encoded array into DataFrame
+**- Step 5: Convert encoded array into DataFrame**
+  
 ```X_train_encoded_df = pd.DataFrame(data=X_train_encoded, columns=X_encoder.get_feature_names_out())```
 
-- Step 6: Drop original categorical columns & concatenate encoded ones
+**- Step 6: Drop original categorical columns & concatenate encoded ones**
+  
 ```X_train_final = pd.concat([
     X_train.drop(columns=["claim_status", "author_ban_status"]).reset_index(drop=True),
     X_train_encoded_df
@@ -253,7 +259,7 @@ print(classification_report(y_test_final, y_pred, target_names=target_labels))
 - **The model showed decent predictive power**, but most features had only a small effect.
 
 - **Video features alone are somewhat useful**, but user-level data could improve predictions
-- 
+  
 ---
 # CERTIFICATE
 ![cert](https://github.com/user-attachments/assets/368daf48-3337-4339-8d74-fab53d9b7ef6)
