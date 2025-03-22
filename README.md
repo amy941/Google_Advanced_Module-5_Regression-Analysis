@@ -104,56 +104,106 @@ data_upsampled = pd.concat([data_majority, data_minority_upsampled]).reset_index
 # Display new class counts
 data_upsampled['verified_status'].value_counts()
 ```
-✍ ```replace=True```: to sample with replacement
+
+![upsampled](https://github.com/user-attachments/assets/37a9db15-3359-4433-8c69-1b296393d0b2)
+
+✍ **Upsampling** to create class balance in the outcome variable. not verified = verified = 17884
+
+```replace=True```: to sample with replacement
+
 ```n_samples=len(data_majority)```: to match majority class
+
 ```random_state=0```: reproducibility, zero result are repeatable
 
 
 ## Task 3) Feature Engineering
 ### Create ```text_length``` from ```video_transcription_text```
 
+```
+data_upsampled[["verified_status", "video_transcription_text"]].groupby(by="verified_status")[["video_transcription_text"]].agg(func=lambda array: np.mean([len(text) for text in array]))
+```
+![text_length](https://github.com/user-attachments/assets/8fb04297-da84-4694-9fc9-7193da1a9ecd)
+
+✍ Use **lambda** function to calculate the length in ```video_transcription_text``` column, then store the result in a new column called ```text_length```
+
+Grouped the data by ```verified_status``` to compare avg transcription lengths between ```verified``` and ```not verified``` users. The result shows **verified users tend to use slightly shorter transcriptions** on average (89 vs. 85)
 
 
 ## Task 4) Multicollinearity Check
 ### Heatmap Correlation
 
+```
+plt.figure(figsize=(8, 6))
+sns.heatmap(
+    data_upsampled[["video_duration_sec", "claim_status", "author_ban_status", "video_view_count", 
+                    "video_like_count", "video_share_count", "video_download_count", "video_comment_count", "text_length"]]
+    .corr(numeric_only=True), 
+    annot=True, 
+    cmap="Greens")
+plt.title("Heatmap of the dataset")
+plt.show()
+```
+![heatmap](https://github.com/user-attachments/assets/f0b81e19-57dd-48e2-82b8-90f4716c4947)
 
+✍ Heatmap reveals strong correlation: ```video_view_count``` & ```video_like_count``` (0.86 correlation coeff.)
 
-
-
-
-
-
-
-
-
+### Remove ```video_like_count``` to maintain model assumptions
+- One of the **key assumptions** of logistic regression is **no serve multicollinearity** which usually occurs when two or more predictor variables are **highly correlated** with each other.
+- in this case, pairs have a **very strong correlation**:
+  * ```video_view_count``` & ```video_like_count```: **0.86 correlation coeff.**
+  * ```video_like_count``` & ```video_share_count```: 0.83 correlation coeff.
+    
+ ---> to maintain model assumptions and avoid multicollinearity, we **remove** ```video_like_count```. Benefits: less redundancy, cleaner interpretation, improved model reliability and performance. 
 
 
 ---
 
 # PACE: Construct 📊
 ## Task 1) Feature Selection
-
-
-
-
+- Final features:
+  * ```video_duration_sec```
+  * ```video_view_count```
+  * ```video_share_count```
+  * ```video_download_count```
+  * ```video_comment_count```
+  * ```claim_status```
+  * ```author_ban_status```
+    
 ## Task 2) Data Preparation
 ### OneHotCoder
-### Encoded ```verified_status``` to Binary
+- Step 1: Select categorical columns to encode
+```X_train_to_encode = X_train[["claim_status", "author_ban_status"]]```
 
+- Step 2: Initialize OneHotEncoder: ```not verified``` = 0, ```verified``` = 1
+```X_encoder = OneHotEncoder(drop='first', sparse_output=False)```
 
+- Step 3: Fit & Transform the training data
+```X_train_encoded = X_encoder.fit_transform(X_train_to_encode)```
 
+- Step 4: Retrieve encoded feature names
+```X_encoder.get_feature_names_out()```
+
+- Step 5: Convert encoded array into DataFrame
+```X_train_encoded_df = pd.DataFrame(data=X_train_encoded, columns=X_encoder.get_feature_names_out())```
+
+- Step 6: Drop original categorical columns & concatenate encoded ones
+```X_train_final = pd.concat([
+    X_train.drop(columns=["claim_status", "author_ban_status"]).reset_index(drop=True),
+    X_train_encoded_df
+], axis=1)
+```
+![X_train_final](https://github.com/user-attachments/assets/2637dd3b-a5b3-4ffc-88b9-2ce10cad9843)
 
 ## Task 3) Model Building
 ### LogisticRegression
-### Train & Test Split
-
-
-
-
-
-
-
+```
+log_clf = LogisticRegression(random_state=0, max_iter=800)
+log_clf.fit(X_train_final, y_train_final)
+```
+✍ ```LogisticRegression()```: create logistic regression model
+```random_state=0```: 0 reproducibility
+```max_iter=800```: maximum iterations for model to converge
+```.fit(...)```: train model, ```X_train_final```: numberic features, ```y_train_final```: binary target variable (0 for not verified, 1 for verified)
 
 
 ⚠️⚠️⚠️ For more details, visit:
@@ -163,26 +213,47 @@ data_upsampled['verified_status'].value_counts()
 # PACE: Execute 🤝
 ## Task 1) Model Evaluation
 ### Confusion Matrix
+```
+log_cm = confusion_matrix(y_test_final, y_pred, labels=log_clf.classes_)
+log_disp = ConfusionMatrixDisplay(confusion_matrix=log_cm, display_labels=log_clf.classes_)
+log_disp.plot()
+plt.show()
+```
 
+![confusion_matrix](https://github.com/user-attachments/assets/cf8c2f3a-7248-423b-8eb0-6b8c59c80697)
 
+✍ Confusion Matrix shows:
+- Upper left: True Negative (2,044) ✅
+- Upper-right: False Positive (2,415)
+- Lower-left: False Negative (725)
+- Lower-right: True Positive (3,758) ✅
 
 
 ## Task 2) Performance Metrics
+```
+target_labels = ["verified", "not verified"]
+print(classification_report(y_test_final, y_pred, target_names=target_labels))
+```
+![performance_metrics](https://github.com/user-attachments/assets/dc4c6fe8-ef1a-4fbd-9d9f-bdbc168ee211)
 
-
-
-## Task 3) Coefficient Insights
-
-
-
----
-# 📌 Business Recommendations
-
-
+✍ Logistic Regression model achieved:
+- 61% precision
+- 84% recall
+- 65% accuracy
+- 71% f1-score
 
 ---
 # ✅ Conclusions
+- **Multicollinearity was addressed** by removing ```video_like_count``` which was highly correlated with other features.
 
+- **Longer videos slightly increase** the likelihood of the user being verified.
+
+- **Model performance was moderate** with 61% precision, 84% recall, and ~65% accuracy.
+
+- **The model showed decent predictive power**, but most features had only a small effect.
+
+- **Video features alone are somewhat useful**, but user-level data could improve predictions
+- 
 ---
 # CERTIFICATE
 ![cert](https://github.com/user-attachments/assets/368daf48-3337-4339-8d74-fab53d9b7ef6)
