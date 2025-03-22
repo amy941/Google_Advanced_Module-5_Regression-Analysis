@@ -57,6 +57,8 @@ plt.show()
 ```
 ![video_like_count](https://github.com/user-attachments/assets/a85254d3-c3f0-44ac-a8cf-ef773297a6e0)
 
+![video_comment_count](https://github.com/user-attachments/assets/71118643-0a35-4084-b039-1b53be1f8323)
+
 ✍ The ```video_like_count``` boxplot revealed a **long right tail**, meaning a few videos had **extremely high like counts** (1e5 ~ 6e5). To handle this, we **capped** the extreme values using **IQR rule**
 
 
